@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', '7e+fvi*p6zq$3g88^=l^vr%s&5d==r7i_#=&)9jd6y5#00be$d')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['saml.g10f.de']
 
 # Application definition
 
