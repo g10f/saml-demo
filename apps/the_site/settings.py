@@ -22,6 +22,7 @@ if RUNNING_DEVSERVER:
     INTERNAL_IPS = ['.localhost', '127.0.0.1', '[::1]']
     DEBUG = True
 else:
+    INTERNAL_IPS = []
     DEBUG = False
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
