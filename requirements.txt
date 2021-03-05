@@ -2,3 +2,4 @@ django
 python3-saml
 jinja2
 psycopg2
+gunicorn
