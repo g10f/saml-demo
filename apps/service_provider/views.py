@@ -35,10 +35,11 @@ def prepare_django_request(request):
         'https': 'on' if request.is_secure() else 'off',
         'http_host': request.META['HTTP_HOST'],
         'script_name': request.META['PATH_INFO'],
-        'server_port': request.META['SERVER_PORT'],
         'get_data': request.GET.copy(),
         'post_data': request.POST.copy()
     }
+    if 'HTTP_X_FORWARDED_FOR' not in request.META:
+        result['server_port'] = request.META['SERVER_PORT']
     return result
 
 

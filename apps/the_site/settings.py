@@ -10,7 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
+
+try:
+    RUNNING_DEVSERVER = (sys.argv[1] == 'runserver')
+except IndexError:
+    RUNNING_DEVSERVER = False
+
+if RUNNING_DEVSERVER:
+    INTERNAL_IPS = ['.localhost', '127.0.0.1', '[::1]']
+    DEBUG = True
+else:
+    DEBUG = False
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', '7e+fvi*p6zq$3g88^=l^vr%s&5d==r7i_#=&)9jd6y5#00be$d')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ['saml.g10f.de']
+ALLOWED_HOSTS = INTERNAL_IPS + ['saml.g10f.de']
 
 # Application definition
 
