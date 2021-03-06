@@ -75,7 +75,7 @@ TEMPLATES = [
     },
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'the_site.jinja2.environment'
@@ -133,7 +133,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-SAML_FOLDER = os.path.join(os.path.dirname(BASE_DIR), 'saml')
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+STATIC_ROOT = os.environ.get('STATIC_ROOT', BASE_DIR.parent / 'htdocs/static')
+# STATIC_ROOT = BASE_DIR.parent.parent.parent / 'static/htdocs/saml.g10f.de/static'
+
+SAML_FOLDER = str(BASE_DIR.parent / 'saml')
 
 LOGGING = {
     'version': 1,
