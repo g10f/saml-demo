@@ -34,7 +34,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', '7e+fvi*p6zq$3g88^=l^vr%s&5d==r7i_#=&)9jd6y5#00be$d')
 
-ALLOWED_HOSTS = INTERNAL_IPS + ['saml.g10f.de']
+ALLOWED_HOSTS = INTERNAL_IPS + [os.environ.get('HOST', 'saml2.g10f.de')]
 
 # Application definition
 
