@@ -28,6 +28,9 @@ else:
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DEFAULT_FROM_EMAIL = 'webmaster@g10f.de'
+SERVER_EMAIL = 'webmaster@g10f.de'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
