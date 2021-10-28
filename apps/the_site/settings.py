@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'the_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'login',
-        'USER': 'login',
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'login'),
+        'NAME': 'saml_demo',
+        'USER': 'saml_demo',
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'saml_demo'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
