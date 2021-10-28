@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'the_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'saml_demo',
-        'USER': 'saml_demo',
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'saml_demo'),
+        'NAME': 'login',
+        'USER': 'login',
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'login'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -145,13 +145,26 @@ SAML_FOLDER = str(BASE_DIR.parent / 'saml')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
     },
     'root': {
-        'handlers': ['console'],
+        'handlers': ['console', 'mail_admins'],
         'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
     },
 }
