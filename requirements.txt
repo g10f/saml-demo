@@ -1,5 +1,5 @@
 django
-python3-saml
+python3-saml<1.13
 jinja2
 psycopg2
 gunicorn
