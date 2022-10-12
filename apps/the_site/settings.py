@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': 'saml_demo',
         'USER': 'saml_demo',
         'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'saml_demo'),
-        'HOST': 'localhost',
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
         'PORT': '5432',
     }
 }
