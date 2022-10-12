@@ -17,8 +17,8 @@ def update_authn_context(saml_settings, comparison='minimum', loa=1):
         2: ["urn:oasis:names:tc:SAML:2.0:ac:classes:TimeSyncToken"],
         3: ["urn:oasis:names:tc:SAML:2.0:ac:classes:X509"]
     }
-    saml_settings._OneLogin_Saml2_Settings__security['requestedAuthnContextComparison'] = comparison
-    saml_settings._OneLogin_Saml2_Settings__security['requestedAuthnContext'] = mapping[loa]
+    saml_settings._security['requestedAuthnContextComparison'] = comparison
+    saml_settings._security['requestedAuthnContext'] = mapping[loa]
     return saml_settings
 
 
