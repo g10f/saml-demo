@@ -1,4 +1,5 @@
 django
+dj-database-url
 python3-saml
 jinja2
 psycopg2

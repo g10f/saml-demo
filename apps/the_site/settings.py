@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+
+import dj_database_url
 import sys
 from pathlib import Path
 
@@ -28,8 +30,8 @@ else:
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEFAULT_FROM_EMAIL = 'webmaster@g10f.de'
-SERVER_EMAIL = 'webmaster@g10f.de'
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@g10f.de')
+SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'webmaster@g10f.de')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -37,7 +39,7 @@ SERVER_EMAIL = 'webmaster@g10f.de'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', '7e+fvi*p6zq$3g88^=l^vr%s&5d==r7i_#=&)9jd6y5#00be$d')
 
-ALLOWED_HOSTS = INTERNAL_IPS + [os.environ.get('HOST', 'saml2.g10f.de')]
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]'] + os.getenv('ALLOWED_HOSTS', 'saml2.g10f.de').split(',')
 
 # Application definition
 
@@ -93,15 +95,10 @@ WSGI_APPLICATION = 'the_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'saml_demo',
-        'USER': 'saml_demo',
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'saml_demo'),
-        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', "postgres://saml_demo:saml_demo@localhost:5432/saml_demo"), conn_max_age=60)
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
