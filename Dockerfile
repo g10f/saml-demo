@@ -20,7 +20,7 @@ RUN pip install -r requirements.txt
 #####################################################
 FROM python:3.11-slim
 
-RUN apt-get update -y && apt-get -y install postgresql-client postgresql-client-common libxmlsec1-openssl && apt-get clean
+RUN apt-get update -y && apt-get -y install postgresql-client postgresql-client-common libxmlsec1-openssl && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV WORKDIR=/opt/g10f/saml-demo
 ENV PYTHONDONTWRITEBYTECODE=1
