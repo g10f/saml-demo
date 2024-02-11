@@ -1,32 +1,29 @@
-FROM python:3.12 as builder
+FROM python:3.12-slim-bookworm
+
+ENV RUN_DEPS="postgresql-client libxmlsec1-openssl"
+ENV BUILD_DEPS="build-essential libpq-dev pkg-config libxml2-dev libxmlsec1-dev"
+RUN set -ex \
+    && apt-get update && apt-get install -y --no-install-recommends $RUN_DEPS \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV WORKDIR=/opt/g10f/saml-demo
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV VIRTUAL_ENV=$WORKDIR/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
-RUN apt-get update -y && apt-get -y install python3-venv pkg-config libxml2-dev libxmlsec1-dev libxmlsec1-openssl
 
 WORKDIR $WORKDIR
 RUN chown -R $USERNAME: $WORKDIR
 
 COPY requirements.txt .
-# COPY requirements requirements
-RUN python3 -m venv $VIRTUAL_ENV
-RUN pip install -U pip wheel
-RUN pip install -r requirements.txt
 
-#####################################################
-FROM python:3.12-slim
-
-RUN apt-get update -y && apt-get -y install postgresql-client postgresql-client-common libxmlsec1-openssl && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-ENV WORKDIR=/opt/g10f/saml-demo
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV VIRTUAL_ENV=$WORKDIR/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN set -ex \
+    && apt-get update && apt-get install -y --no-install-recommends $BUILD_DEPS \
+    && python3 -m venv ${VIRTUAL_ENV} \
+    && pip install -U pip wheel \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS \
+    && rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=worker
 ARG USER_UID=1000
@@ -37,8 +34,6 @@ ARG SECRET_KEY=dummy
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
-
-COPY --from=builder $VIRTUAL_ENV $VIRTUAL_ENV
 
 WORKDIR $WORKDIR/apps
 COPY apps .
