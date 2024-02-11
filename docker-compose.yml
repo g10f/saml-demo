@@ -1,0 +1,15 @@
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ./saml:/opt/g10f/saml-demo/saml
+    environment:
+      - DATABASE_URL=postgres://saml_demo:saml_demo@host.docker.internal:5432/saml_demo
+      - FORWARDED_ALLOW_IPS=*
+      - DJANGO_MIGRATE=off
+      - DJANGO_CREATE_SUPERUSER=on
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_EMAIL=mail@g10f.de

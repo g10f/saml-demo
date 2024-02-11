@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.12-slim-bullseye
 
 ENV RUN_DEPS="postgresql-client libxmlsec1-openssl"
 ENV BUILD_DEPS="build-essential libpq-dev pkg-config libxml2-dev libxmlsec1-dev"
@@ -28,8 +28,6 @@ RUN set -ex \
 ARG USERNAME=worker
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-# required to run collectstatic
-ARG SECRET_KEY=dummy
 
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
