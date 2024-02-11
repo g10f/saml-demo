@@ -1,6 +1,6 @@
 FROM python:3.12-slim-bookworm
 
-ENV RUN_DEPS="postgresql-client libxmlsec1-openssl"
+ENV RUN_DEPS="postgresql-client libxml2 libxmlsec1 libxmlsec1-openssl"
 ENV BUILD_DEPS="build-essential libpq-dev pkg-config libxml2-dev libxmlsec1-dev"
 RUN set -ex \
     && apt-get update && apt-get install -y --no-install-recommends $RUN_DEPS \

@@ -79,7 +79,7 @@ def index(request):
             request.session['samlUserdata'] = auth.get_attributes()
             request.session['samlNameId'] = auth.get_nameid()
             request.session['samlSessionIndex'] = auth.get_session_index()
-            logger.info(base64.b64decode(req['post_data']['SAMLResponse']))
+            logger.debug(base64.b64decode(req['post_data']['SAMLResponse']))
             if 'RelayState' in req['post_data'] and \
                     OneLogin_Saml2_Utils.get_self_url(req) != req['post_data']['RelayState']:
                 return HttpResponseRedirect(auth.redirect_to(req['post_data']['RelayState']))
