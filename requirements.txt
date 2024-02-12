@@ -6,4 +6,4 @@ psycopg2
 gunicorn
 whitenoise
 # https://bugs.launchpad.net/lxml/+bug/2052903
-lxml<5.1
+lxml<5
