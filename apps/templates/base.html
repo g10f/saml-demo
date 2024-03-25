@@ -12,6 +12,9 @@
   <!-- CSS only -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <script src="{{ static('js/theme.js') }}"></script>
+  {% if enable_plausible %}
+  <script defer data-domain="{{ domain }}" src="/js/plausible-script.js"></script>
+  {% endif %}
 </head>
 <body>
 <div class="container pt-3">

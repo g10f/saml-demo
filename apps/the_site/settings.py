@@ -27,6 +27,10 @@ else:
     INTERNAL_IPS = []
     DEBUG = False
 
+# Plausible settings
+ENABLE_PLAUSIBLE = os.getenv('ENABLE_PLAUSIBLE', 'False').lower() in ('true', '1', 't')
+DOMAIN = os.getenv('DOMAIN', "localhost")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
