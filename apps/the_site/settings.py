@@ -39,7 +39,8 @@ SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'webmaster@g10f.de')
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '25'))
 
-SESSION_COOKIE_AGE = int(os.getenv('SESSION_COOKIE_AGE', '0'))
+SESSION_COOKIE_AGE = int(os.getenv('SESSION_COOKIE_AGE', '1800')) # 30 min
+SESSION_EXPIRE_AT_BROWSER_CLOSE = os.getenv('SESSION_EXPIRE_AT_BROWSER_CLOSE', 'True').lower() in ('true', '1', 't')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
