@@ -39,6 +39,7 @@ SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'webmaster@g10f.de')
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '25'))
 
+SESSION_COOKIE_AGE = int(os.getenv('SESSION_COOKIE_AGE', '0'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
