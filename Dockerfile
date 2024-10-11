@@ -1,4 +1,4 @@
-FROM python:3.13-slim-bullseye
+FROM python:3.12-slim-bullseye
 
 ENV RUN_DEPS="postgresql-client libxmlsec1-openssl"
 ENV BUILD_DEPS="build-essential libpq-dev pkg-config libxml2-dev libxmlsec1-dev"
