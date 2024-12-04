@@ -1,4 +1,4 @@
-django
+django==5.1.4
 dj-database-url
 python3-saml
 jinja2
