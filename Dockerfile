@@ -1,7 +1,7 @@
-FROM python:3.13-slim
+FROM python:3.12-slim
 
 ENV RUN_DEPS="libxmlsec1-openssl"
-ENV BUILD_DEPS="build-essential libpq-dev pkg-config libxml2-dev libxmlsec1-dev"
+ENV BUILD_DEPS="build-essential pkg-config libxml2-dev libxmlsec1-dev"
 RUN set -ex \
     && apt-get update && apt-get install -y --no-install-recommends $RUN_DEPS \
     && rm -rf /var/lib/apt/lists/*
