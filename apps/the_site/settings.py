@@ -39,6 +39,7 @@ SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'webmaster@g10f.de')
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '25'))
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 SESSION_COOKIE_AGE = int(os.getenv('SESSION_COOKIE_AGE', '1800')) # 30 min
 SESSION_EXPIRE_AT_BROWSER_CLOSE = os.getenv('SESSION_EXPIRE_AT_BROWSER_CLOSE', 'True').lower() in ('true', '1', 't')
 # Quick-start development settings - unsuitable for production
@@ -52,7 +53,7 @@ ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]'] + os.getenv('ALLOWED_HOSTS'
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -103,10 +104,10 @@ WSGI_APPLICATION = 'the_site.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', "postgres://saml_demo:saml_demo@localhost:5432/saml_demo"), conn_max_age=60)
-}
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv('DATABASE_URL', "postgres://saml_demo:saml_demo@localhost:5432/saml_demo"), conn_max_age=60)
+# }
 
 
 # Password validation

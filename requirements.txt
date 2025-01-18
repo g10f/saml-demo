@@ -1,8 +1,6 @@
-django==5.1.4
-dj-database-url
+django==5.1.5
 python3-saml
 jinja2
-psycopg2
 gunicorn
 whitenoise
 # https://bugs.launchpad.net/lxml/+bug/2052903
