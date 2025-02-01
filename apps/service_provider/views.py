@@ -59,9 +59,6 @@ def index(request):
     match req['get_data']:
         case {'sso': _}:
             return HttpResponseRedirect(auth.login(force_authn=False))
-        case {'sso2': _}:
-            return_to = OneLogin_Saml2_Utils.get_self_url(req) + reverse('service_provider:attrs')
-            return HttpResponseRedirect(auth.login(return_to))
         case {'slo': _}:
             name_id = None
             session_index = None
@@ -105,18 +102,6 @@ def index(request):
         'attributes': attributes,
         'paint_logout': paint_logout}
     return render(request, 'index.html', context=context)
-
-
-def attrs(request):
-    paint_logout = False
-    attributes = False
-
-    if 'samlUserdata' in request.session:
-        paint_logout = True
-        if len(request.session['samlUserdata']) > 0:
-            attributes = request.session['samlUserdata'].items()
-
-    return render(request, 'attrs.html', {'paint_logout': paint_logout, 'attributes': attributes})
 
 
 def metadata(request):
