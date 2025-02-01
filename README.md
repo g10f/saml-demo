@@ -1,1 +1,3 @@
-openssl req -new -x509 -days 3652 -nodes -out sp.crt -keyout sp.key
+Simple SAML2 demo app
+=====================
+Modified Django demo web app from python3-saml library without database.

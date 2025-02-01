@@ -1,8 +1,7 @@
 import base64
 
 from django.conf import settings
-from django.http import (HttpResponse, HttpResponseRedirect,
-                         HttpResponseServerError)
+from django.http import (HttpResponse, HttpResponseRedirect, HttpResponseServerError)
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -57,40 +56,40 @@ def index(request):
     attributes = False
     paint_logout = False
 
-    if 'sso' in req['get_data']:
-        return HttpResponseRedirect(auth.login(force_authn=False))
-    elif 'sso2' in req['get_data']:
-        return_to = OneLogin_Saml2_Utils.get_self_url(req) + reverse('service_provider:attrs')
-        return HttpResponseRedirect(auth.login(return_to))
-    elif 'slo' in req['get_data']:
-        name_id = None
-        session_index = None
-        if 'samlNameId' in request.session:
-            name_id = request.session['samlNameId']
-        if 'samlSessionIndex' in request.session:
-            session_index = request.session['samlSessionIndex']
-
-        return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index))
-    elif 'acs' in req['get_data']:
-        auth.process_response()
-        errors = auth.get_errors()
-        not_auth_warn = not auth.is_authenticated()
-        if not errors:
-            request.session['samlUserdata'] = auth.get_attributes()
-            request.session['samlNameId'] = auth.get_nameid()
-            request.session['samlSessionIndex'] = auth.get_session_index()
-            logger.debug(base64.b64decode(req['post_data']['SAMLResponse']))
-            if 'RelayState' in req['post_data'] and \
-                    OneLogin_Saml2_Utils.get_self_url(req) != req['post_data']['RelayState']:
-                return HttpResponseRedirect(auth.redirect_to(req['post_data']['RelayState']))
-    elif 'sls' in req['get_data']:
-        url = auth.process_slo(delete_session_cb=lambda: request.session.flush())
-        errors = auth.get_errors()
-        if len(errors) == 0:
-            if url is not None:
-                return HttpResponseRedirect(url)
-            else:
-                success_slo = True
+    match req['get_data']:
+        case {'sso': _}:
+            return HttpResponseRedirect(auth.login(force_authn=False))
+        case {'sso2': _}:
+            return_to = OneLogin_Saml2_Utils.get_self_url(req) + reverse('service_provider:attrs')
+            return HttpResponseRedirect(auth.login(return_to))
+        case {'slo': _}:
+            name_id = None
+            session_index = None
+            if 'samlNameId' in request.session:
+                name_id = request.session['samlNameId']
+            if 'samlSessionIndex' in request.session:
+                session_index = request.session['samlSessionIndex']
+            return HttpResponseRedirect(auth.logout(name_id=name_id, session_index=session_index))
+        case {'acs': _}:
+            auth.process_response()
+            errors = auth.get_errors()
+            not_auth_warn = not auth.is_authenticated()
+            if not errors:
+                request.session['samlUserdata'] = auth.get_attributes()
+                request.session['samlNameId'] = auth.get_nameid()
+                request.session['samlSessionIndex'] = auth.get_session_index()
+                logger.debug(base64.b64decode(req['post_data']['SAMLResponse']))
+                self_url = OneLogin_Saml2_Utils.get_self_url(req)
+                if 'RelayState' in req['post_data'] and self_url != req['post_data']['RelayState']:
+                    return HttpResponseRedirect(auth.redirect_to(req['post_data']['RelayState']))
+        case {'sls': _}:
+            url = auth.process_slo(delete_session_cb=lambda: request.session.flush())
+            errors = auth.get_errors()
+            if len(errors) == 0:
+                if url is not None:
+                    return HttpResponseRedirect(url)
+                else:
+                    success_slo = True
 
     if 'samlUserdata' in request.session:
         paint_logout = True
