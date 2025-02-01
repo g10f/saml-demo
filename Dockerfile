@@ -35,14 +35,13 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 WORKDIR $WORKDIR/apps
 COPY apps .
-COPY Docker/gunicorn.conf.py ./gunicorn.conf.py
 
 RUN chown -R $USERNAME: /opt/g10f
 
 USER $USERNAME
 ARG SECRET_KEY=dummy
 RUN ./manage.py collectstatic
-ENTRYPOINT ["./docker-entrypoint.sh"]
+
 # Start gunicorn
 CMD ["gunicorn", "the_site.wsgi:application", "-b", "0.0.0.0:8000", "--forwarded-allow-ips", "*"]
 EXPOSE 8000
