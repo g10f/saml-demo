@@ -1,2 +1,4 @@
 saml
-*.sqlite3
+temp
+.venv
+
