@@ -1,4 +1,4 @@
-django==5.1.5
+django==5.1.6
 python3-saml
 jinja2
 gunicorn
