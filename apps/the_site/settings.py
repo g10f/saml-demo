@@ -14,6 +14,8 @@ import os
 import sys
 from pathlib import Path
 
+from django.core.management.utils import get_random_secret_key
+
 try:
     RUNNING_DEVSERVER = (sys.argv[1] == 'runserver')
 except IndexError:
@@ -45,7 +47,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = os.getenv('SESSION_EXPIRE_AT_BROWSER_CLOSE', '
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '7e+fvi*p6zq$3g88^=l^vr%s&5d==r7i_#=&)9jd6y5#00be$d')
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
 ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]'] + os.getenv('ALLOWED_HOSTS', 'saml2.g10f.de').split(',')
 

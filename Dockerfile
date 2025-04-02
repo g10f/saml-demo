@@ -1,7 +1,7 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 ENV RUN_DEPS="libxmlsec1-openssl libxml2"
-ENV BUILD_DEPS="build-essential pkg-config libxml2-dev libxmlsec1-dev"
+ENV BUILD_DEPS="build-essential pkg-config libxml2-dev libxmlsec1-dev libxslt-dev python3-dev"
 RUN set -ex \
     && apt-get update && apt-get install -y --no-install-recommends $RUN_DEPS \
     && rm -rf /var/lib/apt/lists/*
@@ -22,6 +22,7 @@ RUN set -ex \
     && python3 -m venv ${VIRTUAL_ENV} \
     && pip install -U pip wheel \
     && pip install --no-cache-dir -r requirements.txt \
+    && pip install --force-reinstall --no-binary lxml lxml \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
@@ -39,7 +40,6 @@ COPY apps .
 RUN chown -R $USERNAME: /opt/g10f
 
 USER $USERNAME
-ARG SECRET_KEY=dummy
 RUN ./manage.py collectstatic
 
 # Start gunicorn
