@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM python:3.13.3-slim
 
 ENV RUN_DEPS="libxmlsec1-openssl libxml2"
 ENV BUILD_DEPS="build-essential pkg-config libxml2-dev libxmlsec1-dev libxslt-dev python3-dev"
