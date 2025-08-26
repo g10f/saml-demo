@@ -1,4 +1,6 @@
 django==5.2.5
+--no-binary xmlsec
+--no-binary lxml
 python3-saml
 jinja2
 gunicorn
