@@ -1,4 +1,4 @@
-django==5.2.17
+django==5.2.18
 --no-binary xmlsec
 --no-binary lxml
 python3-saml
