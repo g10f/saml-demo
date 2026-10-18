@@ -4,6 +4,8 @@ from django.urls import reverse
 
 from jinja2 import Environment
 
+from the_site import __version__
+
 
 def environment(**options):
     env = Environment(**options)
@@ -11,6 +13,7 @@ def environment(**options):
         'static': static,
         'url': reverse,
         'enable_plausible': settings.ENABLE_PLAUSIBLE,
-        'domain': settings.DOMAIN
+        'domain': settings.DOMAIN,
+        'version': __version__,
     })
     return env

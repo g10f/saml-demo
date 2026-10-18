@@ -1,21 +1,16 @@
 name: ci
 
+# A release is a pushed tag X.Y.Z, e.g. git tag -a 1.6.5 -m "release 1.6.5" && git push --follow-tags
 on:
   push:
-    branches:
-      - 'main'
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
-      - name: Get Version
-        id: version
-        run: |
-          set -x
-          echo "VERSION=$(python apps/version.py)" >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -28,9 +23,9 @@ jobs:
           images: |
             ghcr.io/g10f/saml-demo
           # generate Docker tags based on the following events/attributes
+          # the version is the git tag; latest is set automatically for the highest version
           tags: |
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'master') }}
-            type=pep440,pattern={{version}},value=${{ steps.version.outputs.VERSION }}
+            type=semver,pattern={{version}}
             type=sha
 
       - name: Set up Docker Buildx
@@ -50,6 +45,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VERSION=${{ steps.meta.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
   deploy:

@@ -42,6 +42,10 @@ RUN chown -R $USERNAME: /opt/g10f
 USER $USERNAME
 RUN ./manage.py collectstatic
 
+# release version, set by the CI from the git tag
+ARG VERSION=dev
+ENV VERSION=$VERSION
+
 # Start gunicorn
 CMD ["gunicorn", "the_site.wsgi:application", "-b", "0.0.0.0:8000", "--forwarded-allow-ips", "*"]
 EXPOSE 8000
