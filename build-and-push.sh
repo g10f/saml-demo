@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# version of the checked out commit if it is a release tag, otherwise dev
-tag=$(git describe --tags --exact-match 2>/dev/null || echo dev)
+tag=$(sed -n "s/^__version__ = '\(.*\)'$/\1/p" apps/the_site/__init__.py)
 app=saml-demo
 export DOCKER_BUILDKIT=1
-docker buildx build --platform linux/amd64 --build-arg VERSION=$tag -t ghcr.io/g10f/$app:$tag -t ghcr.io/g10f/$app:latest --load .
+docker buildx build --platform linux/amd64 -t ghcr.io/g10f/$app:$tag -t ghcr.io/g10f/$app:latest --load .

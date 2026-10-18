@@ -46,7 +46,6 @@ Environment variables:
 | `EMAIL_HOST`, `EMAIL_PORT`        | `localhost`, `25`          | mail server for error mails                   |
 | `DEFAULT_FROM_EMAIL`, `SERVER_EMAIL` | `webmaster@g10f.de`     | sender of mails                               |
 | `DJANGO_LOG_LEVEL`                | `INFO`                     |                                               |
-| `VERSION`                         | `dev`                      | version shown in the footer, set by the CI    |
 
 `DEBUG` is on only with `manage.py runserver`.
 
@@ -67,10 +66,12 @@ The app runs on http://localhost:8000. Without docker:
 
 Release
 -------
-The version is the git tag. A release is a pushed tag `X.Y.Z`:
+A release is a git tag `X.Y.Z`. It is created with `git release` (a small release script):
 
-    git tag -a 1.6.6 -m "release 1.6.6"
-    git push --follow-tags origin main
+    git release patch        # or minor, major, X.Y.Z
+
+It writes the new version to `apps/the_site/__init__.py`, commits it as `release X.Y.Z`,
+creates the tag and pushes both. The CI checks that the tag matches `__version__`.
 
 The CI builds the image `ghcr.io/g10f/saml-demo:X.Y.Z` (and `latest`) for amd64 and arm64 and
 deploys it. A push without a tag does not start the CI.
