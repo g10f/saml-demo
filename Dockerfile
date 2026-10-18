@@ -15,16 +15,19 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 WORKDIR $WORKDIR
 RUN chown -R $USERNAME: $WORKDIR
 
-COPY requirements.txt .
-
+# lxml and xmlsec are compiled against the libxml2 of the system, because both must use the same
+# libxml2 version. Compiling takes long, so they are installed in their own layer, which stays
+# cached when requirements.txt changes.
 RUN set -ex \
     && apt-get update && apt-get install -y --no-install-recommends $BUILD_DEPS \
     && python3 -m venv ${VIRTUAL_ENV} \
     && pip install -U pip wheel \
-    && pip install --no-cache-dir -r requirements.txt \
-    && pip install --force-reinstall --no-binary lxml lxml \
+    && pip install --no-cache-dir --no-binary lxml,xmlsec lxml xmlsec \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS \
     && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 ARG USERNAME=worker
 ARG USER_UID=1000
