@@ -1,0 +1,11 @@
+# Direct dependencies of the app. base.txt is generated from this file with all
+# transitive dependencies pinned: pip-compile requirements/base.in
+django==5.2.18
+python3-saml
+# lxml and xmlsec come with python3-saml. They are listed here because the Dockerfile builds both from source
+# against the libxml2 of the system: xmlsec refuses to work with an lxml that uses another libxml2 version.
+lxml
+xmlsec
+jinja2
+gunicorn
+whitenoise

@@ -77,12 +77,21 @@ With docker compose (the directory `saml/` is mounted into the container):
 
 The app runs on http://localhost:8000. Without docker:
 
-    python3 -m venv .venv
-    .venv/bin/pip install -r requirements.txt
+    /usr/bin/python3.14 -m venv .venv
+    .venv/bin/pip install --no-binary lxml,xmlsec -r requirements/dev.txt
     cd apps
     ../.venv/bin/python manage.py runserver
 
-`python3-saml` needs the development packages of libxml2 and xmlsec1, see the `Dockerfile`.
+lxml and xmlsec are built from source against the libxml2 of the system, they need the development
+packages of libxml2, libxslt and xmlsec1 (see the `Dockerfile`).
+
+Dependencies: `requirements/base.in` holds the direct dependencies, `requirements/base.txt` (installed
+in the image) and `requirements/dev.txt` (local, with pip-tools) are generated from the repo root:
+
+    .venv/bin/pip-compile requirements/base.in
+    .venv/bin/pip-compile requirements/dev.in
+
+Dependabot updates them weekly, the Python base image only within 3.14.x.
 
 Tests (they create their own SAML settings and keys with `openssl` and need neither `saml/` nor an
 identity provider):
@@ -99,5 +108,6 @@ A release is a git tag `X.Y.Z`. It is created with `git release` (a small releas
 It writes the new version to `apps/the_site/__init__.py`, commits it as `release X.Y.Z`,
 creates the tag and pushes both. The CI checks that the tag matches `__version__`.
 
-The CI builds the image `ghcr.io/g10f/saml-demo:X.Y.Z` (and `latest`) for amd64 and arm64 and
-deploys it. A push without a tag does not start the CI.
+The CI builds the image `ghcr.io/g10f/saml-demo:X.Y.Z` (and `latest`) for amd64 and arm64, runs the
+tests in the image of each platform, deploys it and checks that https://saml2.g10f.de serves the new
+version and its metadata. A push without a tag does not start the CI.

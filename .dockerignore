@@ -1,4 +1,8 @@
 **/__pycache__
+.git
 .github
+.idea
+.venv
+.claude
 saml
 temp

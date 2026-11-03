@@ -18,8 +18,10 @@ from django.core.management.utils import get_random_secret_key
 
 try:
     RUNNING_DEVSERVER = (sys.argv[1] == 'runserver')
+    RUNNING_TEST = (sys.argv[1] == 'test')
 except IndexError:
     RUNNING_DEVSERVER = False
+    RUNNING_TEST = False
 
 if RUNNING_DEVSERVER:
     INTERNAL_IPS = ['.localhost', '127.0.0.1', '[::1]']
@@ -132,7 +134,21 @@ MEDIA_ROOT = os.getenv('MEDIA_ROOT', BASE_DIR.parent / 'htdocs/media')
 MEDIA_URL = ''
 STATIC_URL = '/static/'
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# The manifest storage gives the static files hashed names, so they can be cached forever. With it, a template
+# referencing a missing static file fails with an error (when DEBUG is off). The tests run without collectstatic,
+# so they use the storage without manifest.
+if RUNNING_TEST:
+    STATICFILES_BACKEND = "whitenoise.storage.CompressedStaticFilesStorage"
+else:
+    STATICFILES_BACKEND = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": STATICFILES_BACKEND,
+    },
+}
 WHITENOISE_ROOT = os.path.join(STATIC_ROOT, 'root')
 
 STATICFILES_DIRS = [
