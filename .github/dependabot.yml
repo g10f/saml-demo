@@ -18,6 +18,11 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      # the demo stays on Django 5.2 LTS, like sso; a new major version is switched to deliberately
+      - dependency-name: "django"
+        update-types:
+          - "version-update:semver-major"
 
   # Maintain the base image in the Dockerfile. Only patch updates (3.14.x): a new Python minor version
   # is switched to deliberately, together with recompiling the requirements.
