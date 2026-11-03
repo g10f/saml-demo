@@ -6,28 +6,28 @@
 #
 asgiref==3.13.0
     # via django
-django==5.2.18
-    # via -r requirements/base.in
+django==6.1.2
+    # via -r base.in
 gunicorn==26.2.0
-    # via -r requirements/base.in
+    # via -r base.in
 isodate==0.7.2
     # via python3-saml
 jinja2==3.1.6
-    # via -r requirements/base.in
+    # via -r base.in
 lxml==6.1.3
     # via
-    #   -r requirements/base.in
+    #   -r base.in
     #   python3-saml
     #   xmlsec
 markupsafe==3.0.4
     # via jinja2
 python3-saml==1.16.0
-    # via -r requirements/base.in
+    # via -r base.in
 sqlparse==0.6.1
     # via django
 whitenoise==6.12.0
-    # via -r requirements/base.in
+    # via -r base.in
 xmlsec==1.3.18
     # via
-    #   -r requirements/base.in
+    #   -r base.in
     #   python3-saml
