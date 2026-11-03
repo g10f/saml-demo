@@ -20,6 +20,26 @@ Endpoints
 The login requests the authentication context `PasswordProtectedTransport` with the comparison
 `minimum`.
 
+Security
+--------
+- The ID of the AuthnRequest is stored in the session of the browser that started the login. The
+  ACS accepts only a response whose `InResponseTo` matches it. A response that was issued for
+  another browser and an unsolicited (IdP-initiated) response are rejected. This prevents login
+  CSRF, where an attacker logs the victim's browser in with the attacker's account.
+- The ID is removed from the session when a response arrives, so a session can use a response
+  only once. The session is a signed cookie without server-side state: with a copy of the old
+  cookie a response can be replayed until it expires (`NotOnOrAfter`, usually a few minutes).
+- The IdP must sign the whole response (`wantMessagesSigned: true`), not only the assertion,
+  otherwise its `InResponseTo` is not protected. Without this setting the app answers with an
+  error instead of starting a login.
+- The IdP posts the response from its own site, so the session cookie is `SameSite=None` and
+  `Secure` (the demo IdP on the same domain would work without, other IdPs don't). Chrome and
+  Firefox accept secure cookies on `http://localhost` as well; Safari or another host over plain
+  http don't, use https there.
+- After the login the app redirects to the `RelayState` only if it points to this site.
+- A missing or malformed SAML message is shown as an error on the page, not answered with a
+  server error. The details are only logged.
+
 SAML configuration
 ------------------
 The SAML settings are read from the directory `saml/` next to `apps/`. It is not part of the
@@ -63,6 +83,12 @@ The app runs on http://localhost:8000. Without docker:
     ../.venv/bin/python manage.py runserver
 
 `python3-saml` needs the development packages of libxml2 and xmlsec1, see the `Dockerfile`.
+
+Tests (they create their own SAML settings and keys with `openssl` and need neither `saml/` nor an
+identity provider):
+
+    cd apps
+    ../.venv/bin/python manage.py test
 
 Release
 -------

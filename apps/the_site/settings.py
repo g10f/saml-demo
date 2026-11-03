@@ -42,6 +42,13 @@ EMAIL_PORT = int(os.getenv('EMAIL_PORT', '25'))
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 SESSION_COOKIE_AGE = int(os.getenv('SESSION_COOKIE_AGE', '1800')) # 30 min
+# The IdP posts the SAML response to the ACS, and the session holds the ID of the request it answers. With the default
+# SameSite=Lax the browser leaves the session cookie out of this POST if the IdP is on another site (another registrable
+# domain, e.g. a local app on localhost against any IdP), and the login would always fail. The demo IdP on the same
+# domain would work with Lax, but the app is meant to work with any IdP. SameSite=None requires Secure; Chrome and
+# Firefox also accept Secure cookies on http://localhost, Safari and other hosts over http don't.
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = os.getenv('SESSION_EXPIRE_AT_BROWSER_CLOSE', 'True').lower() in ('true', '1', 't')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
