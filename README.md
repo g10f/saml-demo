@@ -109,5 +109,7 @@ It writes the new version to `apps/the_site/__init__.py`, commits it as `release
 creates the tag and pushes both. The CI checks that the tag matches `__version__`.
 
 The CI builds the image `ghcr.io/g10f/saml-demo:X.Y.Z` (and `latest`) for amd64 and arm64, runs the
-tests in the image of each platform, deploys it and checks that https://saml2.g10f.de serves the new
-version and its metadata. A push without a tag does not start the CI.
+tests in the image of each platform and then starts the deploy: if the secret `DEPLOY_WORKFLOW`
+(`owner/repo/workflow-file`) is set, it starts that workflow with the inputs `image` and `version`, using
+the secret `DEPLOY_TOKEN`. Without it, e.g. in a fork, nothing is deployed. A push without a tag
+does not start the CI.
